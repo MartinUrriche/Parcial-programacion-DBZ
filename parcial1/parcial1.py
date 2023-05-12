@@ -1,7 +1,6 @@
-
+import datetime
 import re
 import random
-import json
 #1
 def obtener_csv_como_lista():
     with open("parcial1\DBZ (1).csv", 'r',encoding = 'UTF-8') as archivo:
@@ -18,7 +17,6 @@ def obtener_csv_como_lista():
             poder_pelea = int(columna[3])
             poder_ataque = int(columna[4])
             habilidades = re.split(r"[|$%]+",columna[5])
-            #print(habilidades)
             personajes.append({
                 'ID': id,
                 'nombres': nombre,
@@ -38,8 +36,8 @@ def cantidad_personajes_por_raza(raza: str , lista_personajes: list)-> list:
     Brief:
         Calcula y imprime la cantidad de personajes por raza
     Parameters: 
-        raza: es un dato de tipo str que se usa para buscar valores en la lista
-        lista_personajes: la lista con todos los diccionarios que contienen los dartos de los personajes
+        raza: Es un dato de tipo str que se usa para buscar valores en la lista
+        lista_personajes: La lista con todos los diccionarios que contienen los dartos de los personajes
     Return:
         La funcion retorna una lista con los distintos valores contados
     '''
@@ -54,6 +52,13 @@ def cantidad_personajes_por_raza(raza: str , lista_personajes: list)-> list:
     return lista_raza
 #3
 def mostrar_datos_personaje_por_raza(clave:str ,  lista_personajes:list):
+    '''
+    Brief:
+        Muestra los datos de los persoanejes por raza
+    Parameters: 
+        clave: Es un dato de tipo str que se usa para buscar valores en la lista
+        lista_personajes: La lista con todos los diccionarios que contienen los dartos de los personajes
+    '''
     lista_raza = cantidad_personajes_por_raza (clave, lista_personajes)
     for tipo in lista_raza :
         print(f"La {clave} es {tipo}")
@@ -63,6 +68,15 @@ def mostrar_datos_personaje_por_raza(clave:str ,  lista_personajes:list):
         print()
 #4
 def datos_pesonaje_por_habilidad (clave: str, lista:list):
+    '''
+    Brief:
+        Separa los datos por el nombre de la habilidad que ingresa el usuario
+        y imprime los datos de nombre, raza y promedio de poder entre poder de ataque y pelea 
+        que pertenecen a ese/os personajes
+    Parameters: 
+        clave: es un dato de tipo str que se usa para buscar valores en la lista
+        lista_personajes: la lista con todos los diccionarios que contienen los dartos de los personajes
+    '''
     descripcion_habilidad = str(input("Ingrese una descripcion de la habilidad: "))
     print(f"La habilidad es: ", descripcion_habilidad)
     print("La habilidad pertenece a los siguientes personajes: ")
@@ -77,20 +91,15 @@ def datos_pesonaje_por_habilidad (clave: str, lista:list):
 #5
 def mostrar_lista_de_personajes(lista:list):
     '''
-        Brief:
-            Calcula y imprime la cantidad de personajes por raza
-        Parameters: 
-            raza: es un dato de tipo str que se usa para buscar valores en la lista
-            lista_personajes: la lista con todos los diccionarios que contienen los dartos de los personajes
-        Return:
-            La funcion retorna una lista con los distintos valores contados
-        '''
+    Brief:
+        Imprime los personajes con todos sus datos
+    Parameters: 
+        lista_personajes: la lista con todos los diccionarios que contienen los dartos de los personajes
+    '''
     for personaje in lista_personajes:
         id = personaje['ID']
         nombre = personaje['nombres']
         raza = personaje['raza']
-        #if (personaje['raza'] != "Shin-jin" and personaje['raza'] != "Three-Eyed People" ):
-        #    raza = re.split("-", personaje['raza'])
         poder_pelea = personaje['poder_pelea']
         poder_ataque = personaje['poder_ataque']
         habilidades = personaje['habilidades']
@@ -100,11 +109,18 @@ def mostrar_lista_de_personajes(lista:list):
         print(f"Poder de pelea: {poder_pelea}")
         print(f"Poder de ataque: {poder_ataque}")
         print(f"Habilidades: {habilidades}\n")
-mostrar_lista_de_personajes(lista_personajes)
 
 
-def elegi_un_personaje(lista:list,clave_id:int):
-    lista_personajes
+
+def elegi_un_personaje(clave_id:int):
+    '''
+    Brief:
+        Permite que el usuario elija un personaje y lo guarde
+    Parameters: 
+        clave_id: Es un dato de tipo int que se usa para buscar valores en la lista
+    Return:
+        La funcion retorna el nombre del personaje elegido su raza y poder de ataque
+    '''
     eleccion_personaje = int(input("Elegi el numero del personaje que quieras usar: "))
     for personaje in lista_personajes:
         if(eleccion_personaje == personaje[clave_id]):
@@ -115,6 +131,15 @@ def elegi_un_personaje(lista:list,clave_id:int):
 
 
 def personaje_random(clave:int):
+    '''
+    Brief:
+        permite que la maquina elija un personaje random y lo guarde
+    Parameters: 
+        clave_id: Es un dato de tipo int que se usa para buscar valores en la lista
+        lista_personajes: La lista con todos los diccionarios que contienen los dartos de los personajes
+    Return:
+        La funcion retorna el nombre del personaje elegido su raza y poder de ataque
+    '''
     id_personaje_que_eligio = random.randint(0,36)
     for personaje in lista_personajes:
         if(id_personaje_que_eligio == personaje[clave]):
@@ -125,7 +150,14 @@ def personaje_random(clave:int):
 
 
 def jugar_batalla(): 
-    nombre_pj_elegido,raza_pj_elegido,poder_ataque_pj_elegido= elegi_un_personaje(lista_personajes,'ID')
+    '''
+    Brief:
+        La funcion hace una batalla entre el poder de pelea del personaje elegido por el usuario 
+        y el personaje elegido por la maquina
+    Return:
+        La funcion retorna el nombre del personaje ganador y el nombre del personaje perdedor 
+    '''
+    nombre_pj_elegido,raza_pj_elegido,poder_ataque_pj_elegido= elegi_un_personaje('ID')
     print("")
     print(f"El personaje que elgiste es: ",nombre_pj_elegido,raza_pj_elegido,poder_ataque_pj_elegido)
     personaje_random('ID')
@@ -135,14 +167,25 @@ def jugar_batalla():
     print("")
     if(poder_ataque_pj_elegido > poder_ataque_pj_random):
         print(f"El personaje ganador es: ", nombre_pj_elegido,raza_pj_elegido,poder_ataque_pj_elegido)
+        ganadores= nombre_pj_elegido
+        perdedores = nombre_pj_random
     else:
         print("El personaje ganador es: ", nombre_pj_random,raza_pj_random,poder_ataque_pj_random)
-    return nombre_pj_elegido, nombre_pj_random
-
-
-def crear_archivo_txt():
+        ganadores = nombre_pj_random
+        perdedores = nombre_pj_elegido
     
-guardar_duelos_txt()
+    return ganadores, perdedores
+
+
+def crear_archivo_y_guardar_peleas_txt():
+    ganador,perdedor = jugar_batalla()
+    fecha_batalla = datetime.date.today()
+    fecha_batalla_str = fecha_batalla.strftime("%d/%m/%Y")
+    archivo = open("parcial1\duelos.txt", 'a')
+    mensaje = [f"\nEl ganador es: ", ganador, " y el perdedor es: ", perdedor, " la fecha de la pelea fue: ",fecha_batalla_str ]
+    archivo.writelines(mensaje)
+    archivo.close
+
 
 def menu_opciones():
     print('''
@@ -156,7 +199,7 @@ def menu_opciones():
     ''')
 
 def respuestas_menu():
-    menu_opciones
+    menu_opciones()
     respuestas_validas = {1, 2, 3, 4, 5, 6, 7}
     respuesta = int(input("Ingrese una opcion: "))
     while (respuesta not in respuestas_validas):
@@ -165,19 +208,26 @@ def respuestas_menu():
 
 
 def app_DBZ(lista):
-    respuesta = respuestas_menu()
-    match respuesta :
-        case 1:
-            lista_raza = cantidad_personajes_por_raza('raza', lista)
-            for tipo in(lista_raza): 
-                print(f"{tipo}: {lista_raza[tipo]}")
-        case 2: 
-            mostrar_datos_personaje_por_raza('raza', lista_personajes)
-        case 3:
-            datos_pesonaje_por_habilidad('habilidades', lista_personajes)
-        #case 4:
-            
-        #case 5:
+    while True:
+        respuesta = respuestas_menu()
+        match respuesta :
+            case 1:
+                lista_raza = cantidad_personajes_por_raza('raza', lista)
+                for tipo in(lista_raza): 
+                    print(f"{tipo}: {lista_raza[tipo]}")
+            case 2: 
+                mostrar_datos_personaje_por_raza('raza', lista_personajes)
+            case 3:
+                datos_pesonaje_por_habilidad('habilidades', lista_personajes)
+            case 4:
+                mostrar_lista_de_personajes(lista_personajes)
+                crear_archivo_y_guardar_peleas_txt()
+            #case 5:
+
+            #case 6:
+
+            case 7:
+                break
             
 
 
